@@ -4,25 +4,47 @@
 {% block title %}Register{% endblock %}
 
 {% block content %}
-<div class="login-register-box container">
-    <h1>Create Account</h1>
 
-    {% if error_message %}
-        <p class="error-text">{{ error_message }}</p>
-    {% endif %}
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+    <div class="card shadow-lg p-4" style="width: 420px;">
+        <h3 class="text-center text-danger mb-3">Create Account</h3>
 
-    <form method="POST">
-        {% csrf_token %}
-        {{form.as_p}}
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-danger">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
 
-        <div>
-            <button type="submit" class="login-register-btn">Register</button>
-        </div>
-    </form>
+        <form method="POST">
+            {% csrf_token %}
+            <div class="mb-3">
+                {{ form.username.label_tag }}
+                {{ form.username }}
+            </div>
 
-    <span class="login-register-link">
-        Already have an account? <a href="{% url 'login' %}">Login</a>
-    </span>
+            <div class="mb-3">
+                {{ form.email.label_tag }}
+                {{ form.email }}
+            </div>
+
+            <div class="mb-3">
+                {{ form.password.label_tag }}
+                {{ form.password }}
+            </div>
+
+            <div class="mb-3">
+                {{ form.confirm_password.label_tag }}
+                {{ form.confirm_password }}
+            </div>
+
+            <button type="submit" class="btn btn-danger w-100 mt-2">Register</button>
+        </form>
+
+        <p class="text-center mt-3">
+            Already have an account?  
+            <a href="{% url 'login' %}" class="text-danger">Login</a>
+        </p>
+    </div>
 </div>
-{% endblock %}
 
+{% endblock %}
