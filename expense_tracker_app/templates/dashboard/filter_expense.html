@@ -1,0 +1,141 @@
+{% extends 'master.html' %}
+{% load static %}
+
+{% block title %}Filter Expenses{% endblock %}
+
+{% block content %}
+<div class="page-wrapper">
+
+    <div class="container">
+
+        <h2 class="title">Filter Expenses</h2>
+
+        <form method="GET" class="filter-form">
+            {{ form.category.label_tag }}
+            {{ form.category }}
+            <button type="submit" class="btn-search">
+                <i class="fa-solid fa-magnifying-glass"></i> Search
+            </button>
+        </form>
+
+        {% if expenses %}
+            <table class="expense-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Category</th>
+                        <th>Amount</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for expense in expenses %}
+                    <tr>
+                        <td>{{ expense.date }}</td>
+                        <td>{{ expense.category }}</td>
+                        <td>{{ expense.amount }}</td>
+                        <td>{{ expense.description }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p style="text-align:center; color:#4e342e;">No expenses found for this category.</p>
+        {% endif %}
+
+    </div>
+</div>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+/* Page wrapper to center content */
+.page-wrapper {
+    display: flex;
+    justify-content: center; /* horizontal center */
+    align-items: center;    /* vertical center */
+    min-height: 100vh;
+    background: linear-gradient(180deg, #4e342e 0%, #3e2723 100%);
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* Container box */
+.container {
+    background: #ffffff;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    width: 100%;
+    max-width: 800px;
+}
+
+/* Title */
+.title {
+    color: #4e342e;
+    margin-bottom: 20px;
+    font-weight: 600;
+    text-align: center;
+}
+
+/* Form styles */
+.filter-form {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    align-items: center;
+}
+
+.filter-form select {
+    flex: 1;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #bcae9f;
+}
+
+/* Search button with icon */
+.btn-search {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    background: #6d4c41;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 18px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-search:hover {
+    background: #4e342e;
+}
+
+.btn-search i {
+    font-size: 14px;
+}
+
+/* Expense table */
+.expense-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.expense-table th, .expense-table td {
+    border: 1px solid #bcae9f;
+    padding: 10px;
+    text-align: left;
+}
+
+.expense-table th {
+    background: #6d4c41;
+    color: #fff;
+}
+
+.expense-table tbody tr:nth-child(even) {
+    background: #f5f5f5;
+}
+</style>
+{% endblock %}

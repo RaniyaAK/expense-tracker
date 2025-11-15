@@ -6,17 +6,19 @@
 {% block content %}
 
 <div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh;">
-    <div class="card shadow-lg p-4" style="width: 420px;">
-        <h3 class="text-center text-danger mb-3">Create Account</h3>
+    <div class="card shadow-lg p-4" style="width: 420px; background: #fff;">
+
+        <h3 class="text-center" style="color:#4e342e; margin-bottom:1rem; font-weight:700;">Create Account</h3>
 
         {% if messages %}
             {% for message in messages %}
-                <div class="alert alert-danger">{{ message }}</div>
+                <div class="alert alert-danger py-2">{{ message }}</div>
             {% endfor %}
         {% endif %}
 
         <form method="POST">
             {% csrf_token %}
+
             <div class="mb-3">
                 {{ form.username.label_tag }}
                 {{ form.username }}
@@ -37,12 +39,14 @@
                 {{ form.confirm_password }}
             </div>
 
-            <button type="submit" class="btn btn-danger w-100 mt-2">Register</button>
+            <button type="submit" style="background:#6d4c41; color:#fff; width:100%; font-weight:600; padding:0.5rem; border:none; border-radius:6px; transition:0.2s; margin-top:0.5rem;">
+                Register
+            </button>
         </form>
 
-        <p class="text-center mt-3">
+        <p class="text-center mt-3" style="color:#4e342e;">
             Already have an account?  
-            <a href="{% url 'login' %}" class="text-danger">Login</a>
+            <a href="{% url 'login' %}" style="color:#6d4c41; font-weight:600;">Login</a>
         </p>
     </div>
 </div>

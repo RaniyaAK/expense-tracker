@@ -1,10 +1,14 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from .forms import UserRegistrationForm, UserLoginForm
+from .models import Expense
+from .forms import ExpenseForm
+from .forms import ExpenseFilterForm
+
 
 
 # HOME
@@ -96,42 +100,92 @@ def reset_password(request, email):
 
 def logging_in(request):
     return render(request, 'logging_in.html')
+#    ______________________________________________________________________________________________________________________________
 
 
 def dashboard(request):
     return render(request, 'dashboard.html')
 
 
-def logging_in(request):
-    return render(request, 'logging_in.html')
+def filter_expense(request):
+    return render(request, 'dashboard/filter_expense.html')
+
+def expense_chart(request):
+    return render(request, 'dashboard/expense_chart.html')
 
 
-# RESET PASSWORD
-def reset_password(request, email):
+
+# EDIT EXPENSE
+@login_required
+def edit_expense(request, id):
+    expense = get_object_or_404(Expense, id=id, user=request.user)
+
     if request.method == 'POST':
-        new_password = request.POST.get('password')
-        confirm_password = request.POST.get('confirm_password')
+        form = ExpenseForm(request.POST, instance=expense)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Expense updated successfully.")
+            return redirect('view_expense')
+    else:
+        form = ExpenseForm(instance=expense)
 
-        if new_password != confirm_password:
-            messages.error(request, "Passwords do not match.")
-            return redirect('reset_password', email=email)
+    return render(request, 'dashboard/edit_expense.html', {'form': form})
 
-        try:
-            user = User.objects.get(email=email)
-            user.set_password(new_password)
-            user.save()
 
-            # Authenticate and login user automatically
-            user = authenticate(username=user.username, password=new_password)
-            if user:
-                login(request, user)
-                
-                # Redirect to logging in page
-                return redirect('logging_in')
+# DELETE EXPENSE
+@login_required
+def delete_expense(request, id):
+    expense = get_object_or_404(Expense, id=id, user=request.user)
+    if request.method == 'POST':
+        expense.delete()
+        messages.success(request, "Expense deleted successfully.")
+        return redirect('view_expense')
 
-            return redirect('dashboard')
+    return render(request, 'dashboard/confirm_delete.html', {'expense': expense})
 
-        except User.DoesNotExist:
-            messages.error(request, "User not found.")
 
-    return render(request, 'reset_password.html', {'email': email})
+# Add Expense
+@login_required
+def add_expense(request):
+    if request.method == "POST":
+        form = ExpenseForm(request.POST)
+        if form.is_valid():
+            expense = form.save(commit=False)
+            expense.user = request.user
+            expense.save()
+            return redirect('view_expense')
+    else:
+        form = ExpenseForm()
+
+    return render(request, 'dashboard/add_expense.html', {'form': form})
+
+
+# View expense
+@login_required
+def view_expense(request):
+    # Get only the expenses of the logged-in user
+    expenses = Expense.objects.filter(user=request.user).order_by('-date')
+    
+    # Calculate total expense
+    total_expense = sum(exp.amount for exp in expenses)
+    
+    return render(request, 'dashboard/view_expense.html', {
+        'expenses': expenses,
+        'total_expense': total_expense,
+    })
+
+
+@login_required
+def filter_expense(request):
+    form = ExpenseFilterForm(request.GET or None)
+    expenses = Expense.objects.filter(user=request.user).order_by('-date')
+
+    if form.is_valid():
+        category = form.cleaned_data.get('category')
+        if category:
+            expenses = expenses.filter(category=category)
+
+    return render(request, 'dashboard/filter_expense.html', {
+        'form': form,
+        'expenses': expenses
+    })

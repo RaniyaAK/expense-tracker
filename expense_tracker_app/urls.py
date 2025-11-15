@@ -17,9 +17,14 @@ urlpatterns = [
     path('forgot_password/', views.forgot_password, name='forgot_password'),
     path('reset_password/<str:email>/', views.reset_password, name='reset_password'),
 
-
     path('logging-in/', views.logging_in, name='logging_in'),
 
+    path('add_expense/', views.add_expense, name='add_expense'),
+    path('view_expense/', views.view_expense, name='view_expense'),
+    path('filter_expense/', views.filter_expense, name='filter_expense'),
+    path('expense_chart/', views.expense_chart, name='expense_chart'),
+    path('edit_expense/<int:id>/', views.edit_expense, name='edit_expense'),
+    path('delete_expense/<int:id>/', views.delete_expense, name='delete_expense'),
 
 ]
 
