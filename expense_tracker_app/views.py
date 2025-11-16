@@ -163,10 +163,8 @@ def add_expense(request):
 # View expense
 @login_required
 def view_expense(request):
-    # Get only the expenses of the logged-in user
     expenses = Expense.objects.filter(user=request.user).order_by('-date')
     
-    # Calculate total expense
     total_expense = sum(exp.amount for exp in expenses)
     
     return render(request, 'dashboard/view_expense.html', {
@@ -188,4 +186,20 @@ def filter_expense(request):
     return render(request, 'dashboard/filter_expense.html', {
         'form': form,
         'expenses': expenses
+    })
+
+from django.db.models import Sum
+from django.db.models.functions import TruncMonth
+
+def monthly_expense(request):
+    monthly_data = (
+        Expense.objects
+        .annotate(month=TruncMonth('date'))
+        .values('month')
+        .annotate(total=Sum('amount'))
+        .order_by('-month')
+    )
+
+    return render(request, 'dashboard/monthly_expense.html', {
+        'monthly_data': monthly_data
     })

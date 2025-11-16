@@ -1,0 +1,99 @@
+{% extends 'master.html' %}
+{% load static %}
+
+{% block title %}Monthly Expense{% endblock %}
+
+{% block content %}
+
+<div class="page-wrapper">
+
+    <a href="{% url 'dashboard' %}" class="back-btn">← Back</a>
+
+    <div class="container">
+        <h2 class="title">Monthly Expense Summary</h2>
+
+        {% if monthly_data %}
+        <table class="expense-table">
+            <thead>
+                <tr>
+                    <th>Month</th>
+                    <th>Total Expense</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for item in monthly_data %}
+                <tr>
+                    <td>{{ item.month|date:"F Y" }}</td>
+                    <td>₹{{ item.total }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        {% else %}
+        <p style="text-align:center; color:#4e342e;">No expenses found.</p>
+        {% endif %}
+
+    </div>
+</div>
+
+<style>
+.page-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(180deg, #4e342e 0%, #3e2723 100%);
+    padding: 20px;
+    position: relative;
+}
+
+.back-btn {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    text-decoration: none;
+    color: #fff3e0;
+    background: rgba(0,0,0,0.2);
+    padding: 6px 12px;
+    border-radius: 6px;
+}
+
+.container {
+    background: #fff;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.25);
+    max-width: 600px;
+    width: 100%;
+}
+
+.title {
+    text-align: center;
+    color: #4e342e;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+.expense-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.expense-table th, .expense-table td {
+    border: 1px solid #bcae9f;
+    padding: 10px;
+}
+
+.expense-table th {
+    background: #6d4c41;
+    color: white;
+}
+
+.expense-table tr:nth-child(even) {
+    background: #f5f5f5;
+}
+</style>
+
+{% endblock %}
