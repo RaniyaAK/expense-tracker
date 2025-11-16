@@ -12,7 +12,6 @@ from django.db.models import Sum
 from django.db.models.functions import TruncMonth
 
 
-
 # HOME
 def home(request):
     return render(request, 'home.html')
@@ -109,14 +108,6 @@ def dashboard(request):
     return render(request, 'dashboard.html')
 
 
-def filter_expense(request):
-    return render(request, 'dashboard/filter_expense.html')
-
-def expense_chart(request):
-    return render(request, 'dashboard/expense_chart.html')
-
-
-
 # EDIT EXPENSE
 @login_required
 def edit_expense(request, id):
@@ -203,4 +194,22 @@ def monthly_expense(request):
 
     return render(request, 'dashboard/monthly_expense.html', {
         'monthly_data': monthly_data
+    })
+
+
+def expense_chart(request):
+    expenses = (
+        Expense.objects
+        .filter(user=request.user)
+        .values('category')
+        .annotate(total=Sum('amount'))
+        .order_by('category')
+    )
+
+    labels = [item['category'] for item in expenses]
+    data = [float(item['total']) for item in expenses]
+
+    return render(request, 'dashboard/expense_chart.html', {
+        'labels': labels,
+        'data': data,
     })

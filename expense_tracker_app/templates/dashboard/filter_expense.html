@@ -6,6 +6,9 @@
 {% block content %}
 <div class="page-wrapper">
 
+    <!-- Back Button -->
+    <a href="{% url 'dashboard' %}" class="back-btn">← Back</a>
+
     <div class="container">
 
         <h2 class="title">Filter Expenses</h2>
@@ -49,18 +52,38 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 <style>
-/* Page wrapper to center content */
+/* Page wrapper */
 .page-wrapper {
     display: flex;
-    justify-content: center; /* horizontal center */
-    align-items: center;    /* vertical center */
+    justify-content: center;
+    align-items: center;
     min-height: 100vh;
     background: linear-gradient(180deg, #4e342e 0%, #3e2723 100%);
     padding: 20px;
     box-sizing: border-box;
+    position: relative;
 }
 
-/* Container box */
+/* Back button */
+.back-btn {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    text-decoration: none !important; /* REMOVE underline */
+    color: #fff3e0;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 15px;
+    transition: 0.3s;
+}
+
+.back-btn:hover {
+    background: rgba(255, 255, 255, 0.35);
+    text-decoration: none !important;
+}
+
+/* Container */
 .container {
     background: #ffffff;
     padding: 25px;
@@ -78,7 +101,7 @@
     text-align: center;
 }
 
-/* Form styles */
+/* Form */
 .filter-form {
     display: flex;
     gap: 10px;
@@ -93,7 +116,7 @@
     border: 1px solid #bcae9f;
 }
 
-/* Search button with icon */
+/* Search button */
 .btn-search {
     display: inline-flex;
     align-items: center;
@@ -113,11 +136,7 @@
     background: #4e342e;
 }
 
-.btn-search i {
-    font-size: 14px;
-}
-
-/* Expense table */
+/* Table */
 .expense-table {
     width: 100%;
     border-collapse: collapse;
@@ -126,7 +145,6 @@
 .expense-table th, .expense-table td {
     border: 1px solid #bcae9f;
     padding: 10px;
-    text-align: left;
 }
 
 .expense-table th {

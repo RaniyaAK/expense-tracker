@@ -1,0 +1,120 @@
+{% extends 'master.html' %}
+{% load static %}
+
+{% block title %}Expense Chart{% endblock %}
+
+{% block content %}
+<div class="page-wrapper">
+
+    <a href="{% url 'dashboard' %}" class="back-btn">← Back</a>
+
+    <div class="container">
+        <h2 class="title">Expense Chart</h2>
+        <canvas id="expenseChart" style="max-height: 360px;"></canvas>
+    </div>
+</div>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- Django data safely -->
+{{ labels|json_script:"labels_data" }}
+{{ data|json_script:"data_values" }}
+
+<script>
+// Read data
+const labels = JSON.parse(document.getElementById("labels_data").textContent);
+const data = JSON.parse(document.getElementById("data_values").textContent);
+
+console.log("labels ->", labels);
+console.log("data ->", data);
+
+// Generate pastel colors
+function generateColors(n) {
+    const colors = [];
+    for (let i = 0; i < n; i++) {
+        const hue = Math.round((360 / n) * i);
+        colors.push(`hsl(${hue} 60% 70%)`);
+    }
+    return colors;
+}
+
+const colorPalette = generateColors(Math.max(1, labels.length));
+
+// One category case
+if (data.length === 1) {
+    colorPalette[0] = 'hsl(15 60% 65%)';
+}
+
+const ctx = document.getElementById('expenseChart').getContext('2d');
+
+if (!labels.length || !data.length) {
+    ctx.canvas.parentNode.insertAdjacentHTML(
+        'afterend',
+        '<p style="text-align:center; color:#4e342e; margin-top:12px;">No expense data to show.</p>'
+    );
+} else {
+    new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: labels,
+            datasets: [{
+                data: data,
+                backgroundColor: colorPalette,
+                borderColor: '#ffffff',
+                borderWidth: 2,
+                hoverOffset: 8
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'bottom' }
+            }
+        }
+    });
+}
+</script>
+
+<style>
+.page-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(180deg, #4e342e 0%, #3e2723 100%);
+    padding: 20px;
+    position: relative;
+}
+.back-btn {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    text-decoration: none !important;   /* FIX underline */
+    color: #fff3e0;
+    background: rgba(0,0,0,0.2);
+    padding: 6px 12px;
+    border-radius: 6px;
+}
+
+.back-btn:hover {
+    text-decoration: none !important;    /* Also remove underline on hover */
+    background: rgba(0,0,0,0.35);
+}
+
+.container {
+    background: #fff;
+    padding: 25px;
+    border-radius: 12px;
+    max-width: 500px;
+    width: 100%;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.25);
+}
+.title {
+    text-align: center;
+    color: #4e342e;
+    margin-bottom: 25px;
+}
+</style>
+
+{% endblock %}
