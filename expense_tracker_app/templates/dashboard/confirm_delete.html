@@ -4,16 +4,116 @@
 {% block title %}Confirm Delete{% endblock %}
 
 {% block content %}
-<div class="container" style="max-width: 500px; margin: 100px auto; text-align: center;">
 
-    <h2 style="color:#4e342e;">Confirm Delete</h2>
-    <p>Are you sure you want to delete this expense?</p>
+<div class="delete-wrapper">
 
-    <form method="POST">
-        {% csrf_token %}
-        <button type="submit" class="btn btn-danger">Yes, Delete</button>
-        <a href="{% url 'view_expense' %}" class="btn btn-secondary">Cancel</a>
-    </form>
+    <!-- Back Button -->
+    <a href="{% url 'view_expense' %}" class="back-btn">← Back</a>
 
+    <div class="delete-container">
+
+        <h2 class="title">Confirm Delete</h2>
+
+        <p style="margin-bottom: 20px; color:#4e342e;">
+            Are you sure you want to delete this expense?
+        </p>
+
+        <!-- Showing which item is getting deleted -->
+        <div class="item-box">
+            <p><strong>Date:</strong> {{ expense.date }}</p>
+            <p><strong>Category:</strong> {{ expense.category }}</p>
+            <p><strong>Amount:</strong> ₹{{ expense.amount }}</p>
+            <p><strong>Description:</strong> {{ expense.description }}</p>
+        </div>
+
+        <form method="POST" style="margin-top: 20px;">
+            {% csrf_token %}
+            <button type="submit" class="btn delete-btn">Delete</button>
+            <a href="{% url 'view_expense' %}" class="btn cancel-btn">Cancel</a>
+        </form>
+
+    </div>
 </div>
+
+<style>
+/* Full page center layout */
+.delete-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(180deg, #4e342e 0%, #3e2723 100%);
+    padding: 20px;
+    box-sizing: border-box;
+    position: relative;
+}
+
+/* Back button */
+.back-btn {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    text-decoration: none;
+    color: #fff3e0;
+    background: rgba(0,0,0,0.2);
+    padding: 6px 12px;
+    border-radius: 6px;
+    transition: 0.2s;
+}
+.back-btn:hover {
+    background: rgba(0,0,0,0.4);
+}
+
+/* White card */
+.delete-container {
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.25);
+    width: 100%;
+    max-width: 480px;
+    text-align: center;
+}
+
+.title {
+    color: #4e342e;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+/* Item details box */
+.item-box {
+    text-align: left;
+    background: #fff7f0;
+    border: 1px solid #d7ccc8;
+    padding: 15px;
+    border-radius: 10px;
+}
+
+/* Buttons */
+.btn {
+    text-decoration: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-weight: 500;
+    display: inline-block;
+    margin: 5px;
+    color: white;
+}
+
+.delete-btn {
+    background: #b71c1c;
+}
+.delete-btn:hover {
+    background: #7f0000;
+}
+
+.cancel-btn {
+    background: #4e342e;
+}
+.cancel-btn:hover {
+    background: #3e2723;
+}
+</style>
+
 {% endblock %}
