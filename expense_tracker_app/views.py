@@ -186,6 +186,7 @@ def filter_expense(request):
 def monthly_expense(request):
     monthly_data = (
         Expense.objects
+        .filter(user=request.user) 
         .annotate(month=TruncMonth('date'))
         .values('month')
         .annotate(total=Sum('amount'))

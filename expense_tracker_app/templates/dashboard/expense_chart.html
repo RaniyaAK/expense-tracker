@@ -49,11 +49,13 @@ if (data.length === 1) {
 const ctx = document.getElementById('expenseChart').getContext('2d');
 
 if (!labels.length || !data.length) {
-    ctx.canvas.parentNode.insertAdjacentHTML(
+    ctx.canvas.insertAdjacentHTML(
         'afterend',
         '<p style="text-align:center; color:#4e342e; margin-top:12px;">No expense data to show.</p>'
     );
-} else {
+}
+
+else {
     new Chart(ctx, {
         type: 'doughnut',
         data: {
