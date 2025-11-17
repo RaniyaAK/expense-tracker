@@ -3,6 +3,8 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.contrib.auth.forms import AuthenticationForm
 from .models import Expense
+from datetime import date
+
 
 
 
@@ -61,6 +63,18 @@ class ExpenseForm(forms.ModelForm):
             "amount": forms.NumberInput(attrs={"class": "form-control", "min": "1"}),
             "description": forms.Textarea(attrs={"class": "form-control", "rows": 3}),
         }
+
+
+
+
+
+    # 👇 Add this function
+    def clean_date(self):
+        selected_date = self.cleaned_data.get("date")
+        if selected_date and selected_date > date.today():
+            raise ValidationError("Future dates are not allowed.")
+        return selected_date
+
 
 
 #Expense FilterForm
