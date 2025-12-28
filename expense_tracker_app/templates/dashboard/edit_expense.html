@@ -4,61 +4,157 @@
 {% block title %}Edit Expense{% endblock %}
 
 {% block content %}
-<div class="container" style="max-width: 600px; margin: 50px auto;">
-    <h2 class="title" style="text-align:center; color:#4e342e;">Edit Expense</h2>
 
-    <form method="POST" class="expense-form">
-        {% csrf_token %}
-        <div class="form-group">
-            {{ form.date.label_tag }}
-            {{ form.date }}
-        </div>
-        <div class="form-group">
-            {{ form.category.label_tag }}
-            {{ form.category }}
-        </div>
-        <div class="form-group">
-            {{ form.amount.label_tag }}
-            {{ form.amount }}
-        </div>
-        <div class="form-group">
-            {{ form.description.label_tag }}
-            {{ form.description }}
-        </div>
+<div class="delete-wrapper">
 
-        <button type="submit" class="save-button">Update Expense</button>
-    </form>
+    <a href="{% url 'view_expense' %}" class="back-btn">← Back</a>
+
+    <div class="delete-container">
+
+        <h2 class="title">Edit Expense</h2>
+
+        <p style="margin-bottom: 20px; color:#4e342e;">
+            Update the expense details below.
+        </p>
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <div class="item-box">
+
+                <div class="form-group">
+                    {{ form.date.label_tag }}
+                    {{ form.date }}
+                </div>
+
+                <div class="form-group">
+                    {{ form.category.label_tag }}
+                    {{ form.category }}
+                </div>
+
+                <div class="form-group">
+                    {{ form.amount.label_tag }}
+                    {{ form.amount }}
+                </div>
+
+                <div class="form-group">
+                    {{ form.description.label_tag }}
+                    {{ form.description }}
+                </div>
+
+            </div>
+
+            <div style="margin-top: 20px;">
+                <button type="submit" class="btn cancel-btn">Update</button>
+                <a href="{% url 'view_expense' %}" class="btn delete-btn">Cancel</a>
+            </div>
+
+        </form>
+
+    </div>
 </div>
 
 <style>
-.container {
+.delete-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(180deg, #4e342e 0%, #3e2723 100%);
+    padding: 20px;
+    box-sizing: border-box;
+    position: relative;
+}
+
+.back-btn {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    text-decoration: none;
+    color: #fff3e0;
+    background: rgba(0,0,0,0.2);
+    padding: 6px 12px;
+    border-radius: 6px;
+    transition: 0.2s;
+}
+.back-btn:hover {
+    background: rgba(0,0,0,0.4);
+}
+
+.delete-container {
     background: #ffffff;
-    padding: 25px;
+    padding: 30px;
     border-radius: 12px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-}
-.expense-form .form-group {
-    margin-bottom: 15px;
-}
-input, select, textarea {
+    box-shadow: 0 5px 15px rgba(0,0,0,0.25);
     width: 100%;
-    padding: 10px;
-    border: 1px solid #bcae9f;
-    border-radius: 6px;
-    margin-top: 5px;
+    max-width: 480px;
+    text-align: center;
 }
-.save-button {
+
+.title {
+    color: #4e342e;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.item-box {
+    text-align: left;
+    background: #fff7f0;
+    border: 1px solid #d7ccc8;
+    padding: 15px;
+    border-radius: 10px;
+}
+
+.form-group {
+    margin-bottom: 12px;
+}
+
+.item-box input,
+.item-box select,
+.item-box textarea {
     width: 100%;
-    background: #6d4c41;
-    color: #fff;
-    padding: 12px;
+    padding: 8px;
+    margin-top: 6px;
     border-radius: 6px;
+    border: 1px solid #bcaaa4;
+    font-family: inherit;
+}
+
+.btn {
+    text-decoration: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-weight: 500;
+    display: inline-block;
+    margin: 5px;
+    color: #ffffff;
     border: none;
-    font-size: 16px;
     cursor: pointer;
 }
-.save-button:hover {
+
+.btn,
+.btn:hover,
+.btn:focus,
+.btn:active,
+.btn:focus-visible {
+    color: #ffffff !important;
+    outline: none;
+    box-shadow: none;
+}
+
+.delete-btn {
+    background: #b71c1c;
+}
+.delete-btn:hover {
+    background: #7f0000;
+}
+
+.cancel-btn {
     background: #4e342e;
 }
+.cancel-btn:hover {
+    background: #3e2723;
+}
 </style>
+
 {% endblock %}

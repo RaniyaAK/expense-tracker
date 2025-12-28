@@ -7,7 +7,6 @@
 
 <div class="delete-wrapper">
 
-    <!-- Back Button -->
     <a href="{% url 'view_expense' %}" class="back-btn">← Back</a>
 
     <div class="delete-container">
@@ -18,7 +17,6 @@
             Are you sure you want to delete this expense?
         </p>
 
-        <!-- Showing which item is getting deleted -->
         <div class="item-box">
             <p><strong>Date:</strong> {{ expense.date }}</p>
             <p><strong>Category:</strong> {{ expense.category }}</p>
@@ -36,7 +34,6 @@
 </div>
 
 <style>
-/* Full page center layout */
 .delete-wrapper {
     display: flex;
     justify-content: center;
@@ -48,7 +45,6 @@
     position: relative;
 }
 
-/* Back button */
 .back-btn {
     position: absolute;
     top: 20px;
@@ -64,7 +60,6 @@
     background: rgba(0,0,0,0.4);
 }
 
-/* White card */
 .delete-container {
     background: #ffffff;
     padding: 30px;
@@ -81,7 +76,6 @@
     margin-bottom: 10px;
 }
 
-/* Item details box */
 .item-box {
     text-align: left;
     background: #fff7f0;
@@ -90,7 +84,6 @@
     border-radius: 10px;
 }
 
-/* Buttons */
 .btn {
     text-decoration: none;
     padding: 8px 16px;
@@ -101,7 +94,6 @@
     color: #ffffff;
 }
 
-/* ❗ Text color NEVER changes */
 .btn,
 .btn:hover,
 .btn:focus,
