@@ -6,9 +6,6 @@ from .models import Expense
 from datetime import date
 
 
-
-
-# User Registration Form
 class UserRegistrationForm(forms.ModelForm):
     password = forms.CharField(
         widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Enter password'})
@@ -25,20 +22,33 @@ class UserRegistrationForm(forms.ModelForm):
             'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Enter email'}),
         }
 
-    def clean_email(self):
-        email = self.cleaned_data.get('email')
-        if User.objects.filter(email=email).exists():
-            raise ValidationError("Email already registered.")
-        return email
-
     def clean(self):
         cleaned_data = super().clean()
+
+        username = cleaned_data.get("username")
+        email = cleaned_data.get("email")
         password = cleaned_data.get("password")
         confirm_password = cleaned_data.get("confirm_password")
 
-        if password != confirm_password:
-            raise ValidationError("Passwords do not match.")
+        # 1️⃣ Username check (FIRST)
+        if username and User.objects.filter(username=username).exists():
+            self.add_error("username", "Username already exists.")
+            return cleaned_data  # ⛔ STOP HERE
+
+        # 2️⃣ Email check (ONLY if username is valid)
+        if email and User.objects.filter(email=email).exists():
+            self.add_error("email", "Email already registered.")
+            return cleaned_data  # ⛔ STOP HERE
+
+        # 3️⃣ Password mismatch (ONLY if username & email are valid)
+        if password and confirm_password and password != confirm_password:
+            self.add_error("confirm_password", "Passwords do not match.")
+
         return cleaned_data
+
+
+
+
 
 
 # Login Form

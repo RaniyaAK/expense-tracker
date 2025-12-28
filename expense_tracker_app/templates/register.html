@@ -6,48 +6,90 @@
 {% block content %}
 
 <div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh;">
-    <div class="card shadow-lg p-4" style="width: 420px; background: #fff;">
+    <div class="card shadow-lg p-4" style="width: 420px; background: #fff; border-radius: 10px;">
 
-        <h3 class="text-center" style="color:#4e342e; margin-bottom:1rem; font-weight:700;">Create Account</h3>
+        <h3 class="text-center" style="color:#4e342e; margin-bottom:1rem; font-weight:700;">
+            Create Account
+        </h3>
 
+        <!-- 🔴 Non-field errors (form-level errors) -->
+        {% if form.non_field_errors %}
+            <div class="alert alert-danger py-2">
+                {{ form.non_field_errors }}
+            </div>
+        {% endif %}
+
+        <!-- 🔴 Django messages (optional, if used in views) -->
         {% if messages %}
             {% for message in messages %}
-                <div class="alert alert-danger py-2">{{ message }}</div>
+                <div class="alert alert-danger py-2">
+                    {{ message }}
+                </div>
             {% endfor %}
         {% endif %}
 
-        <form method="POST">
+        <form method="POST" novalidate>
             {% csrf_token %}
 
+            <!-- Username -->
             <div class="mb-3">
                 {{ form.username.label_tag }}
                 {{ form.username }}
+                {% if form.username.errors %}
+                    <div class="text-danger small">
+                        {{ form.username.errors.0 }}
+                    </div>
+                {% endif %}
             </div>
 
+            <!-- Email -->
             <div class="mb-3">
                 {{ form.email.label_tag }}
                 {{ form.email }}
+                {% if form.email.errors %}
+                    <div class="text-danger small">
+                        {{ form.email.errors.0 }}
+                    </div>
+                {% endif %}
             </div>
 
+            <!-- Password -->
             <div class="mb-3">
                 {{ form.password.label_tag }}
                 {{ form.password }}
+                {% if form.password.errors %}
+                    <div class="text-danger small">
+                        {{ form.password.errors.0 }}
+                    </div>
+                {% endif %}
             </div>
 
+            <!-- Confirm Password -->
             <div class="mb-3">
                 {{ form.confirm_password.label_tag }}
                 {{ form.confirm_password }}
+                {% if form.confirm_password.errors %}
+                    <div class="text-danger small">
+                        {{ form.confirm_password.errors.0 }}
+                    </div>
+                {% endif %}
             </div>
 
-            <button type="submit" style="background:#6d4c41; color:#fff; width:100%; font-weight:600; padding:0.5rem; border:none; border-radius:6px; transition:0.2s; margin-top:0.5rem;">
+            <button type="submit"
+                style="background:#6d4c41; color:#fff; width:100%; font-weight:600;
+                       padding:0.6rem; border:none; border-radius:6px;
+                       transition:0.2s;">
                 Register
             </button>
         </form>
 
-        <p class="text-center mt-3" style="color:#4e342e;">
-            Already have an account?  
-            <a href="{% url 'login' %}" style="color:#6d4c41; font-weight:600;">Login</a>
+        <p class="text-center mt-3 mb-0" style="color:#4e342e;">
+            Already have an account?
+            <a href="{% url 'login' %}" style="color:#6d4c41; font-weight:600;">
+                Login
+            </a>
         </p>
+
     </div>
 </div>
 
